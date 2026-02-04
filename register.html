@@ -1,125 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ideathon Registration</title>
-    <style>
-        :root {
-            --orange: #FF6B00; --yellow: #FFC700; --black: #000000; --white: #ffffff;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        /* --- POSTER STYLES --- */
-        body {
-            background-color: var(--yellow);
-            background-image: radial-gradient(var(--black) 0.5px, transparent 0.5px);
-            background-size: 15px 15px;
-            font-family: 'Arial Black', sans-serif;
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; margin: 0;
-        }
+  <title>Combinator Ideathon</title>
 
-        .poster-container {
-            background: var(--white); width: 400px;
-            border: 8px solid var(--black); text-align: center;
-            padding-bottom: 40px; position: relative;
-        }
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="style.css" />
 
-        .register-btn {
-            background: var(--orange); color: white;
-            border: 3px solid var(--black); padding: 15px 30px;
-            font-family: 'Arial Black'; cursor: pointer;
-            box-shadow: 5px 5px 0px var(--black);
-        }
-
-        /* --- MODAL STYLES --- */
-        .modal {
-            display: none; position: fixed; z-index: 100;
-            left: 0; top: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.8);
-        }
-
-        .modal-content {
-            background: var(--yellow); margin: 10% auto;
-            padding: 30px; border: 5px solid var(--black);
-            width: 320px; box-shadow: 10px 10px 0px var(--black);
-        }
-
-        .input-group { text-align: left; margin-bottom: 15px; }
-        input { 
-            width: 100%; padding: 10px; border: 3px solid var(--black); 
-            box-sizing: border-box; font-weight: bold;
-        }
-
-        .error-msg { color: #d00; font-size: 11px; display: none; margin-top: 5px; }
-    </style>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
+
 <body>
 
-    <div class="poster-container">
-        <h1 style="font-size: 40px; margin-top: 40px;">WHY COMBINATOR</h1>
-        <p>No boring lectures—just pure innovation!</p>
-        
-        <button class="register-btn" id="openModalBtn">REGISTER FOR IDEATHON</button>
+  <!-- ===============================
+       POSTER CONTAINER
+  ================================ -->
+
+  <div class="container">
+
+    <!-- Title -->
+    <div class="title-box">
+      COMBINATOR<br />
+      IDEATHON
     </div>
 
-    <div id="regModal" class="modal">
-        <div class="modal-content">
-            <h2 style="margin-top:0">REGISTRATION</h2>
-            <form id="registrationForm">
-                <div class="input-group">
-                    <label>Name</label>
-                    <input type="text" id="userName" required>
-                </div>
-                <div class="input-group">
-                    <label>College Email</label>
-                    <input type="email" id="userEmail" placeholder="name@vitapstudent.ac.in" required>
-                    <div id="emailError" class="error-msg">❌ Must use @vitapstudent.ac.in</div>
-                </div>
-                <div class="input-group">
-                    <label>Registration Number</label>
-                    <input type="text" id="regNo" required>
-                </div>
-                <button type="submit" class="register-btn" style="width:100%">SUBMIT</button>
-                <p id="closeBtn" style="cursor:pointer; text-decoration: underline; margin-top:15px">Cancel</p>
-            </form>
-        </div>
+    <!-- Subtitle -->
+    <p class="subtitle">
+      Entrepreneurship Club • VIT-AP University
+    </p>
+
+    <!-- Info Blocks -->
+    <div class="info-row">
+      <div class="info yellow">JAN 26</div>
+      <div class="info orange">EINSTEIN HALL</div>
+      <div class="info black">12:00 PM</div>
     </div>
 
-    <script>
-        // Wait for DOM to load
-        document.addEventListener('DOMContentLoaded', () => {
-            const modal = document.getElementById("regModal");
-            const openBtn = document.getElementById("openModalBtn");
-            const closeBtn = document.getElementById("closeBtn");
-            const form = document.getElementById("registrationForm");
+    <!-- Registration Form -->
+    <form id="registrationForm">
 
-            // 1. Open logic
-            openBtn.addEventListener('click', () => {
-                modal.style.display = "block";
-            });
+      <input
+        type="text"
+        id="name"
+        placeholder="Full Name"
+        required
+      />
 
-            // 2. Close logic
-            closeBtn.addEventListener('click', () => {
-                modal.style.display = "none";
-            });
+      <input
+        type="email"
+        id="email"
+        placeholder="College Email ID"
+        required
+      />
 
-            // 3. Validation Logic
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const email = document.getElementById("userEmail").value;
-                const error = document.getElementById("emailError");
+      <input
+        type="text"
+        id="regno"
+        placeholder="Registration Number"
+        required
+      />
 
-                if (email.endsWith("@vitapstudent.ac.in")) {
-                    error.style.display = "none";
-                    alert("Success! Registration Recorded.");
-                    modal.style.display = "none";
-                    form.reset();
-                } else {
-                    error.style.display = "block";
-                }
-            });
-        });
-    </script>
+      <button type="submit">
+        Register
+      </button>
+
+    </form>
+
+  </div>
+
+  <!-- ===============================
+       DIALOG / MODAL
+  ================================ -->
+
+  <div id="dialogOverlay" class="overlay hidden">
+    <div class="dialog">
+      <p id="dialogMessage"></p>
+      <button onclick="closeDialog()">OK</button>
+    </div>
+  </div>
+
+  <!-- Main JS -->
+  <script src="script.js"></script>
+
 </body>
 </html>
