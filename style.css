@@ -197,47 +197,94 @@ button:active {
    MOBILE POSTER RESPONSIVE
 ================================ */
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
 
   body {
     background-size: 40px 70px;
   }
 
   .container {
-    width: 92%;
-    margin: 20px auto;
-    padding: 18px;
+    width: 95%;
+    margin: 15px auto;
+    padding: 16px;
 
     box-shadow:
-      0 0 0 6px #ff7a00,
-      0 15px 30px rgba(0,0,0,0.3);
+      0 0 0 5px #ff7a00,
+      0 12px 25px rgba(0,0,0,0.3);
   }
 
   .title-box {
-    font-size: 22px;
+    font-size: 20px;
     padding: 14px 8px;
+    margin-bottom: 12px;
   }
 
   .subtitle {
     font-size: 12px;
+    margin-bottom: 12px;
   }
 
   .info-row {
     flex-direction: column;
+    margin: 15px 0;
   }
 
   .info {
     margin: 6px 0;
-    font-size: 14px;
+    padding: 10px;
+    font-size: 13px;
   }
 
   input {
-    font-size: 14px;
-    padding: 10px;
+    font-size: 16px;
+    padding: 12px;
+    margin: 6px 0;
   }
 
   button {
     font-size: 15px;
+    padding: 14px;
+    margin-top: 8px;
+    min-height: 44px;
+  }
+
+  .dialog {
+    width: 90%;
+    padding: 20px;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .container {
+    width: 96%;
+    margin: 10px auto;
+    padding: 12px;
+
+    box-shadow:
+      0 0 0 3px #ff7a00,
+      0 8px 15px rgba(0,0,0,0.25);
+  }
+
+  .title-box {
+    font-size: 18px;
+    padding: 12px 6px;
+    letter-spacing: 0.5px;
+  }
+
+  .subtitle {
+    font-size: 11px;
+  }
+
+  .info {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  button {
+    font-size: 14px;
     padding: 12px;
   }
+
 }
