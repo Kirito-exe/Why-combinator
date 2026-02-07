@@ -1,16 +1,9 @@
 /* ===============================
-   FIREBASE INITIALIZATION
+   API CONFIGURATION
 ================================ */
 
-// 🔴 REPLACE these values with your Firebase project config
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+const API_BASE_URL = "https://entrbnd.gaurish.one";
+const API_KEY = "uwu";
 
 /* ===============================
    ELEMENT REFERENCES
@@ -40,7 +33,6 @@ form.addEventListener("submit", async (e) => {
 
   if (!email.endsWith("@vitapstudent.ac.in")) {
     showDialog("Only VIT-AP student email IDs are allowed ❌");
-    resetButton();
     return;
   }
 
@@ -51,7 +43,6 @@ form.addEventListener("submit", async (e) => {
 
   if (parts.length < 2) {
     showDialog("Invalid email format ❌");
-    resetButton();
     return;
   }
 
@@ -59,30 +50,31 @@ form.addEventListener("submit", async (e) => {
 
   if (regFromEmail !== regno) {
     showDialog("Registration number does not match email ❌");
-    resetButton();
     return;
   }
 
-  /* ---------- FIREBASE CHECK ---------- */
+  /* ---------- API CALL ---------- */
 
   try {
-    const userDoc = db.collection("registrations").doc(email);
-    const snapshot = await userDoc.get();
+    const response = await fetch(`${API_BASE_URL}/12feb/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-API-Key": API_KEY
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        reg_number: regno
+      })
+    });
 
-    if (snapshot.exists) {
-      showDialog("You have already registered ❗");
-      resetButton();
+    if (!response.ok) {
+      const error = await response.text();
+      console.error("API Error:", error);
+      showDialog("Registration failed. Please try again.");
       return;
     }
-
-    /* ---------- SAVE REGISTRATION ---------- */
-
-    await userDoc.set({
-      name: name,
-      email: email,
-      regno: regno,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
 
     showDialog("🎉 Registration successful!", true);
     form.reset();
@@ -91,8 +83,6 @@ form.addEventListener("submit", async (e) => {
     console.error(error);
     showDialog("Something went wrong. Please try again.");
   }
-
-  resetButton();
 });
 
 /* ===============================
@@ -107,6 +97,7 @@ function showDialog(message, success = false) {
 
 function closeDialog() {
   overlay.classList.add("hidden");
+  resetButton();
 }
 
 /* ===============================
